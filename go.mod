@@ -1,4 +1,4 @@
-module ws_server
+module ws_proxy
 
 go 1.21.5
 
