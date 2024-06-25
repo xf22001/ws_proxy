@@ -1,12 +1,7 @@
-name: Build and Release
+name: Build and Upload
 
 on:
   workflow_dispatch:  # 允许手动触发工作流程
-    inputs:
-      tag:
-        description: 'Tag for release'
-        required: true
-        default: 'latest'
 
 jobs:
   build:
@@ -22,29 +17,10 @@ jobs:
         go-version: 1.21  # 指定你需要的Go版本
 
     - name: Build package
-      run: go build -v ./...
+      run: go build
 
-    - name: Test package
-      run: go test -v ./...
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
       with:
-        tag_name: ${{ github.event.inputs.tag }}
-        release_name: Release ${{ github.event.inputs.tag }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./ws_proxy  # 替换为你的二进制文件路径
-        asset_name: ws_proxy  # 替换为你的二进制文件名称
-        asset_content_type: application/octet-stream
-
+        name: build-artifacts
+        path: ws_proxy  # 指定包含编译结果的目录
