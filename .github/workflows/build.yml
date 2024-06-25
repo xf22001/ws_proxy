@@ -31,7 +31,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         tag_name: ${{ github.event.inputs.tag }}
         release_name: Release ${{ github.event.inputs.tag }}
@@ -41,10 +41,10 @@ jobs:
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./ws_server  # 替换为你的二进制文件路径
+        asset_path: ./ws_proxy  # 替换为你的二进制文件路径
         asset_name: ws_proxy  # 替换为你的二进制文件名称
         asset_content_type: application/octet-stream
 
